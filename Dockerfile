@@ -1,8 +1,10 @@
-FROM python:3.10.3-slim-buster
+FROM python:3.10.10
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
+RUN pip install --upgrade pip
+
+COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
@@ -14,4 +16,4 @@ ENV HOST 0.0.0.0
 
 EXPOSE 8080
 
-CMD ["python", "main.py"]
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "main:app"]
