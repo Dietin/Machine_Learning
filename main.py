@@ -133,7 +133,6 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         logger.error("Terjadi kesalahan dalam melakukan prediksi kalori.", exc_info=True)
         raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam melakukan prediksi kalori.")
 
-port = 8000
 
 if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
