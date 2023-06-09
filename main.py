@@ -1,9 +1,14 @@
+import logging
 from fastapi import FastAPI, HTTPException, Path
 from pydantic import BaseModel
 import tensorflow as tf
 import mysql.connector
 import numpy as np
+import os
 import uvicorn
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Definisikan model pengguna
 class UserInfo(BaseModel):
@@ -17,16 +22,16 @@ class UserInfo(BaseModel):
 # Buat koneksi ke database MySQL
 def create_db_connection():
     conn = mysql.connector.connect(
-        host="34.101.233.133",
-        user="root",
-        password="development21",
-        database="Backend_Dietin"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_DATABASE")
     )
     return conn
 
 # Load model H5
 def load_model():
-    model = tf.keras.models.load_model('something3 (1).h5')
+    model = tf.keras.models.load_model('Model_2_linear.h5')
     return model
 
 app = FastAPI()
@@ -56,7 +61,8 @@ def get_user_info(user_id: int = Path(..., description="ID Pengguna"), dataUser_
         return {"age": age, "weight": weight, "height": height, "gender": gender, "bmr": bmr, "activity_level": activity_level}
 
     except Exception as e:
-         raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam mengambil data pengguna.")
+        logger.error("Terjadi kesalahan dalam mengambil data pengguna.", exc_info=True)
+        raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam mengambil data pengguna.")
 
 # Endpoint untuk melakukan prediksi kalori berdasarkan data pengguna
 @app.post("/predict/{user_id}/{dataUser_id}")
@@ -71,34 +77,32 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         cursor = conn.cursor()
 
         # Ambil data pengguna dari database
-
-        print("before")
         query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s AND dataUser_id = %s"
         cursor.execute(query, (user_id, dataUser_id))
         result = cursor.fetchone()
-        
 
         if result is None:
             raise HTTPException(status_code=404, detail="Pengguna dengan ID tersebut tidak ditemukan.")
 
+        # Tutup koneksi ke database
+        cursor.close()
+        conn.close()
+
         # Ambil informasi pengguna dari hasil query
-        age, weight, height, gender, bmr, activity_level = result  # Tidak digunakan pada saat prediksi
-        print(result)  # Tambahkan baris ini
+        age, weight, height, gender, bmr, activity_level = result
 
-  
         # Gunakan informasi pengguna untuk memprediksi kalori
-
         input_data = [age, weight, height, gender, bmr, activity_level]
 
         model = load_model()
-
         prediction = model.predict(np.expand_dims(input_data, axis=0))
-
-
         predicted_calories = float(prediction[0].item())
-        print(predicted_calories)
+
         try:
             # Simpan hasil prediksi ke dalam tabel user_info
+            conn = create_db_connection()
+            cursor = conn.cursor()
+
             update_query = "UPDATE dataUser SET idealCalories = %s WHERE user_id = %s AND dataUser_id = %s"
             cursor.execute(update_query, (predicted_calories, user_id, dataUser_id))
             conn.commit()
@@ -106,6 +110,7 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
             # Tutup koneksi ke database
             cursor.close()
             conn.close()
+
             response = {
                 "user_id": user_id,
                 "dataUser_id": dataUser_id,
@@ -121,9 +126,11 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
             return response
 
         except Exception as e:
+            logger.error("Database Connection Tidak Bekerja", exc_info=True)
             raise HTTPException(status_code=500, detail="Database Connection Tidak Bekerja")
 
     except Exception as e:
+        logger.error("Terjadi kesalahan dalam melakukan prediksi kalori.", exc_info=True)
         raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam melakukan prediksi kalori.")
 
 port = 8000
