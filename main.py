@@ -36,21 +36,21 @@ def load_model():
 
 app = FastAPI()
 
-# Endpoint untuk mendapatkan data pengguna berdasarkan ID pengguna
-@app.get("/predict/{user_id}/{dataUser_id}")
-def get_user_info(user_id: int = Path(..., description="ID Pengguna"), dataUser_id: int = Path(..., description="ID Data Pengguna")):
+@app.get("/predict/{user_id}")
+def get_user_info(user_id: int = Path(..., description="ID Pengguna")):
     try:
         # Buat koneksi ke database
         conn = create_db_connection()
         cursor = conn.cursor()
 
         # Ambil data pengguna dari database
-        query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s AND dataUser_id = %s"
-        cursor.execute(query, (user_id, dataUser_id))
+        query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
         result = cursor.fetchone()
 
         if result is None:
-            raise HTTPException(status_code=404, detail="Pengguna dengan ID tersebut tidak ditemukan.")
+            return {"error": True,
+                    "message": "User ID tidak ditemukan"}
 
         # Tutup koneksi ke database
         cursor.close()
@@ -58,18 +58,30 @@ def get_user_info(user_id: int = Path(..., description="ID Pengguna"), dataUser_
 
         # Mengembalikan data pengguna
         age, weight, height, gender, bmr, activity_level = result
-        return {"age": age, "weight": weight, "height": height, "gender": gender, "bmr": bmr, "activity_level": activity_level}
+        return {
+            "error": False,
+            "message": "Berhasil mendapatkan data pengguna",
+            "data": {
+                "age": age,
+                "weight": weight,
+                "height": height,
+                "gender": gender,
+                "bmr": bmr,
+                "activity_level": activity_level
+            }
+        }
 
     except Exception as e:
-        logger.error("Terjadi kesalahan dalam mengambil data pengguna.", exc_info=True)
-        raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam mengambil data pengguna.")
+        return {
+            "error": True,
+            "message": "Terjadi kesalahan dalam mengambil data pengguna."
+        }
 
-# Endpoint untuk melakukan prediksi kalori berdasarkan data pengguna
-@app.post("/predict/{user_id}/{dataUser_id}")
-def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="ID Pengguna"), dataUser_id: int = Path(..., description="ID Data Pengguna")):
+@app.post("/predict/{user_id}")
+def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="ID Pengguna")):
     # Periksa apakah ada field yang kosong
     if None in user_info.dict().values():
-        raise HTTPException(status_code=400, detail="Mohon isi semua field terlebih dahulu.")
+        return {"error": True, "message": "Data Pengguna belum diisi"}
 
     try:
         # Buat koneksi ke database
@@ -77,12 +89,12 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         cursor = conn.cursor()
 
         # Ambil data pengguna dari database
-        query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s AND dataUser_id = %s"
-        cursor.execute(query, (user_id, dataUser_id))
+        query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
         result = cursor.fetchone()
 
         if result is None:
-            raise HTTPException(status_code=404, detail="Pengguna dengan ID tersebut tidak ditemukan.")
+            return {"error": True, "message": "User ID tidak ditemukan"}
 
         # Tutup koneksi ke database
         cursor.close()
@@ -99,28 +111,40 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         predicted_calories = float(prediction[0].item())
 
         try:
-            # Simpan hasil prediksi ke dalam tabel user_info
+            # Simpan hasil prediksi ke dalam tabel dataUser
             conn = create_db_connection()
             cursor = conn.cursor()
 
-            update_query = "UPDATE dataUser SET idealCalories = %s WHERE user_id = %s AND dataUser_id = %s"
-            cursor.execute(update_query, (predicted_calories, user_id, dataUser_id))
+            update_query = "UPDATE dataUser SET idealCalories = %s WHERE user_id = %s"
+            cursor.execute(update_query, (predicted_calories, user_id))
             conn.commit()
 
             # Tutup koneksi ke database
             cursor.close()
             conn.close()
 
+            # Check predicted calories and update response message accordingly
+            if predicted_calories < 0:
+                message = "Kalori yang diprediksi berlebihan"
+            elif predicted_calories > 0:
+                message = "Kalori yang diprediksi kurang"
+            else:
+                message = "Kalori yang diprediksi tepat"
+
             response = {
-                "user_id": user_id,
-                "dataUser_id": dataUser_id,
-                "age": age,
-                "weight": weight,
-                "height": height,
-                "gender": gender,
-                "bmr": bmr,
-                "activity_level": activity_level,
-                "predicted_calories": predicted_calories
+                "error": False,
+                "message": "Prediksi Kalori Berhasil",
+                "data": {
+                    "user_id": user_id,
+                    "age": age,
+                    "weight": weight,
+                    "height": height,
+                    "gender": gender,
+                    "bmr": bmr,
+                    "activity_level": activity_level,
+                    "predicted_calories": predicted_calories,
+                    "message": message
+                }
             }
 
             return response
@@ -132,7 +156,6 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
     except Exception as e:
         logger.error("Terjadi kesalahan dalam melakukan prediksi kalori.", exc_info=True)
         raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam melakukan prediksi kalori.")
-
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8000)
