@@ -36,7 +36,7 @@ def load_model():
 
 app = FastAPI()
 
-@app.get("/predict/{user_id}")
+@app.get("/dataUser/{user_id}")
 def get_user_info(user_id: int = Path(..., description="ID Pengguna")):
     try:
         # Buat koneksi ke database
