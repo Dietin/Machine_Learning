@@ -1,4 +1,3 @@
-import logging
 from fastapi import FastAPI, HTTPException, Path
 from pydantic import BaseModel
 import tensorflow as tf
@@ -7,8 +6,6 @@ import numpy as np
 import os
 import uvicorn
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Definisikan model pengguna
 class UserInfo(BaseModel):
@@ -103,8 +100,10 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         # Ambil informasi pengguna dari hasil query
         age, weight, height, gender, bmr, activity_level = result
 
+        height_in_m = height / 100.0
+
         # Gunakan informasi pengguna untuk memprediksi kalori
-        input_data = [age, weight, height, gender, bmr, activity_level]
+        input_data = [age, weight, height_in_m, gender, bmr, activity_level]
 
         model = load_model()
         prediction = model.predict(np.expand_dims(input_data, axis=0))
@@ -150,11 +149,9 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
             return response
 
         except Exception as e:
-            logger.error("Database Connection Tidak Bekerja", exc_info=True)
             raise HTTPException(status_code=500, detail="Database Connection Tidak Bekerja")
 
     except Exception as e:
-        logger.error("Terjadi kesalahan dalam melakukan prediksi kalori.", exc_info=True)
         raise HTTPException(status_code=500, detail="Terjadi kesalahan dalam melakukan prediksi kalori.")
 
 if __name__ == '__main__':
