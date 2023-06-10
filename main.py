@@ -92,7 +92,7 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         cursor = conn.cursor()
 
         # Ambil data pengguna dari database
-        query = "SELECT age, weight, height, gender,bmi, bmr, activity_level FROM dataUser WHERE user_id = %s"
+        query = "SELECT age, weight, height, gender, bmi, bmr, activity_level FROM dataUser WHERE user_id = %s"
         cursor.execute(query, (user_id,))
         result = cursor.fetchone()
 

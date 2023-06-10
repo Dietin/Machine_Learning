@@ -1,23 +1,104 @@
-# Machine_Learning
 
-**Prediksi kalori harian (Linear Regression)**
+# API Model-Diet!n-Prediction Calories
+## Environment Variables
 
-1. Input data diri sesuai data yang di training (umur, jenis kelamin, berat, tinggi badan, aktivitas)
-2. Pilih prioritas => gemukin, standar, kurusin
-3. Prediksi kebutuhan kalori berdasarkan prioritas user
-    - Misal, jika ingin gemukin, maka input gemukin nya berapa kg, kemudian lakukan prediksi kalori berdasarkan data yang diinputkan + data berat tambahannya
-4. Output : jumlah kalori dalam sehari dan kebutuhan kalori per 3 sesi (pagi, siang dan malam) berdasarkan prioritas user
-5. Cari rekomendasi resep sesuai selera user
+To run this project, you will need to add the following environment variables to your .env file
 
-**#Pipeline untuk prediksi kalori harian**
+`DB_HOST` = "localhost"
 
-1. Cari dataset yang berhubungan dengan kalori
-2. Preprocessing dataset
-3. create model
-4. training model
-5. evaluate model
-6. retrain model
-7. deploy model
-android => TFLite
-web => tensorflow js
-cloud => tanam ke cloud
+`DB_USER` = "user"
+
+`DB_PASSWORD` = "password"
+
+`DB_DATABASE` = "database"
+
+
+
+## How to use
+
+install the requirments
+
+```bash
+  pip install -r requirments.txt
+```
+
+run uvicorn
+
+```bash
+  uvicorn main:app 
+```
+
+
+
+## API-Documentation
+- [Get User](#user)
+- [Prediction](#prediction)
+
+
+## API Reference
+
+## User
+- Endpoint :
+    - /dataUser/{user_id}
+- Method :
+    - GET {user_id}
+- Header :
+    - Content-Type: application/json
+- Response :
+```json 
+{
+  "error": false,
+  "message": "Berhasil mendapatkan data pengguna",
+  "data": {
+    "age": int,
+    "weight": float,
+    "height": float,
+    "gender": int,
+    "bmi": float,
+    "bmr": float,
+    "activity_level": float,
+  }
+}
+```
+
+## Prediction
+- Endpoint :
+    - /predict/{user_id}
+- Method :
+    - POST {user_id}
+- Header :
+    - Content-Type: application/json
+
+- Body :
+```json 
+{
+  "age": int, required,
+  "weight": float, required,
+  "height": float, required,
+  "gender": int, required,
+  "bmi" : float, required,
+  "bmr": float, required,
+  "activity_level": float, required
+}
+```
+- Response :
+```json 
+{
+  "error": false,
+  "message": "Prediksi Kalori Berhasil",
+  "data": {
+    "user_id": int,
+    "age": int,
+    "weight": float,
+    "height": float,
+    "gender": int,
+    "bmi": float,
+    "bmr": float,
+    "activity_level": float,
+    "predicted_calories": float,
+    "message": "Kalori yang diprediksi kurang" or "Kalori yang diperediksi berlebihan"
+  }
+}
+```
+
+
