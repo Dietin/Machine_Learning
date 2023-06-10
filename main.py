@@ -28,7 +28,7 @@ def create_db_connection():
 
 # Load model H5
 def load_model():
-    model = tf.keras.models.load_model('Model_2_linear.h5')
+    model = tf.keras.models.load_model('model_2_linear.h5')
     return model
 
 app = FastAPI()
@@ -41,7 +41,7 @@ def get_user_info(user_id: int = Path(..., description="ID Pengguna")):
         cursor = conn.cursor()
 
         # Ambil data pengguna dari database
-        query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s"
+        query = "SELECT age, weight, height, gender, bmi, bmr, activity_level FROM dataUser WHERE user_id = %s"
         cursor.execute(query, (user_id,))
         result = cursor.fetchone()
 
@@ -54,7 +54,7 @@ def get_user_info(user_id: int = Path(..., description="ID Pengguna")):
         conn.close()
 
         # Mengembalikan data pengguna
-        age, weight, height, gender, bmr, activity_level = result
+        age, weight, height, gender, bmi, bmr, activity_level = result
         return {
             "error": False,
             "message": "Berhasil mendapatkan data pengguna",
@@ -63,6 +63,7 @@ def get_user_info(user_id: int = Path(..., description="ID Pengguna")):
                 "weight": weight,
                 "height": height,
                 "gender": gender,
+                "bmi": bmi,
                 "bmr": bmr,
                 "activity_level": activity_level
             }
@@ -86,7 +87,7 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         cursor = conn.cursor()
 
         # Ambil data pengguna dari database
-        query = "SELECT age, weight, height, gender, bmr, activity_level FROM dataUser WHERE user_id = %s"
+        query = "SELECT age, weight, height, gender,bmi, bmr, activity_level FROM dataUser WHERE user_id = %s"
         cursor.execute(query, (user_id,))
         result = cursor.fetchone()
 
@@ -98,12 +99,10 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
         conn.close()
 
         # Ambil informasi pengguna dari hasil query
-        age, weight, height, gender, bmr, activity_level = result
-
-        height_in_m = height / 100.0
+        age, weight, height, gender, bmi, bmr, activity_level = result
 
         # Gunakan informasi pengguna untuk memprediksi kalori
-        input_data = [age, weight, height_in_m, gender, bmr, activity_level]
+        input_data = [age, weight, height, gender, bmi, bmr, activity_level]
 
         model = load_model()
         prediction = model.predict(np.expand_dims(input_data, axis=0))
@@ -139,6 +138,7 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
                     "weight": weight,
                     "height": height,
                     "gender": gender,
+                    "bmi": bmi,
                     "bmr": bmr,
                     "activity_level": activity_level,
                     "predicted_calories": predicted_calories,
@@ -156,3 +156,4 @@ def predict_calories(user_info: UserInfo, user_id: int = Path(..., description="
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
