@@ -72,13 +72,13 @@ run uvicorn
 - Body :
 ```json 
 {
-  "age": "integer", required,
-  "weight": "float", required,
-  "height": "float", required,
-  "gender": "integer", required,
-  "bmi" : "float", required,
-  "bmr": "float", required,
-  "activity_level": "float", required
+  "age": "integer, required",
+  "weight": "float, required",
+  "height": "float, required",
+  "gender": "integer, required",
+  "bmi" : "float, required",
+  "bmr": "float, required",
+  "activity_level": "float required"
 }
 ```
 - Response :
