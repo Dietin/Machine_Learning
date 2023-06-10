@@ -50,13 +50,13 @@ run uvicorn
   "error": false,
   "message": "Berhasil mendapatkan data pengguna",
   "data": {
-    "age": int,
-    "weight": float,
-    "height": float,
-    "gender": int,
-    "bmi": float,
-    "bmr": float,
-    "activity_level": float,
+    "age": "integer",
+    "weight": "float",
+    "height": "float",
+    "gender": "integer",
+    "bmi": "float",
+    "bmr": "float",
+    "activity_level": "float",
   }
 }
 ```
@@ -72,13 +72,13 @@ run uvicorn
 - Body :
 ```json 
 {
-  "age": int, required,
-  "weight": float, required,
-  "height": float, required,
-  "gender": int, required,
-  "bmi" : float, required,
-  "bmr": float, required,
-  "activity_level": float, required
+  "age": "integer", required,
+  "weight": "float", required,
+  "height": "float", required,
+  "gender": "integer", required,
+  "bmi" : "float", required,
+  "bmr": "float", required,
+  "activity_level": "float", required
 }
 ```
 - Response :
@@ -87,16 +87,16 @@ run uvicorn
   "error": false,
   "message": "Prediksi Kalori Berhasil",
   "data": {
-    "user_id": int,
-    "age": int,
-    "weight": float,
-    "height": float,
-    "gender": int,
-    "bmi": float,
-    "bmr": float,
-    "activity_level": float,
-    "predicted_calories": float,
-    "message": "Kalori yang diprediksi kurang" or "Kalori yang diperediksi berlebihan"
+    "user_id": "integer",
+    "age": "integer",
+    "weight": "float",
+    "height": "float",
+    "gender": "integer",
+    "bmi": "float",
+    "bmr": "float",
+    "activity_level": "float",
+    "predicted_calories": "float",
+    "message": "Kalori yang diprediksi kurang" "or" "Kalori yang diperediksi berlebihan"
   }
 }
 ```
