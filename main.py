@@ -18,7 +18,7 @@ class UserInfo(BaseModel):
 
 # Buat koneksi ke database MySQL
 def create_db_connection():
-     conn = mysql.connector.connect(
+    conn = mysql.connector.connect(
         host=os.getenv("DB_HOST"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
@@ -33,7 +33,7 @@ def load_model():
 
 app = FastAPI()
 
-@app.get("/", tags=["tags"])
+@app.get("/")
 def halo():
     return("Welcome to Diet!n Backend API")
 
