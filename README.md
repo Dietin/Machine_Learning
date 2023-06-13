@@ -1,5 +1,22 @@
 # Machine_Learning
 
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Model Architecture](#model-architecture)
+
+## General info
+This repository will contain discussions about building models for the Diet!in application which will provide predictions of daily calorie needs
+
+
+## Technologies
+
+
+## Setup
+
+
+## Model Architecture
 **Prediksi kalori harian (Linear Regression)**
 
 1. Input data diri sesuai data yang di training (umur, jenis kelamin, berat, tinggi badan, aktivitas)
