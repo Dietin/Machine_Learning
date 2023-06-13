@@ -7,14 +7,19 @@
 * [Model Architecture](#model-architecture)
 
 ## General info
-This repository will contain discussions about building models for the Diet!in application which will provide predictions of daily calorie needs
-
+This repository will contain information about models for the Diet!in application which will provide predictions of user's calories need per day.
 
 ## Technologies
-
+* Tensorflow 
+* Pandas
+* Numpy
+* Seaborn
 
 ## Setup
-
+The setup to build and training the model : 
+* Jupyter Notebook
+* Install latest version of libraries (Tensorflow, Pandas, Numpy, Seaborn, etc)
+* Prepare dataset with .csv format
 
 ## Model Architecture
 **Prediksi kalori harian (Linear Regression)**
