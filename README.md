@@ -32,6 +32,7 @@ The dataset that we used comes from [Kaggle's site](https://www.kaggle.com/datas
 
 ## Model Results
 **Model's Summary**
+![image](https://github.com/Dietin/Machine_Learning/assets/84969259/9e825104-7f1b-4cee-8a00-bc539e5dda8b)
 
 **Model's Metric**
 
@@ -39,6 +40,11 @@ This is how our [final model](https://github.com/Dietin/Machine_Learning/blob/ma
 ![WhatsApp Image 2023-06-14 at 19 07 44](https://github.com/Dietin/Machine_Learning/assets/99454751/3e2476a4-e7d6-4f9b-929c-a2a03f8bb7d8)
 
 **Model's Testing**
+![image](https://github.com/Dietin/Machine_Learning/assets/84969259/ac344a91-bf87-468c-9af7-0ea2293fee0f)
+![image](https://github.com/Dietin/Machine_Learning/assets/84969259/fea23927-e32d-4989-8b83-9dc12a7b9275)
+This is a result of calorie prediction from our model :
+![image](https://github.com/Dietin/Machine_Learning/assets/84969259/39de99f3-2003-4d84-a8d4-7d5e8b9ebf64)
+
 
 **Final Model's Flow for Daily Calorie Needs Prediction**
 1. User inputs personal data according to the data in the training (age, gender, weight, height, activity)
