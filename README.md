@@ -8,7 +8,7 @@
 * [Model Results](#model-results)
 
 ## General info
-This repository will contain information about the models that used by Diet!n applicatin to predicts user's calories need per day.
+This repository will contain information about the models that used by Diet!n applicatin to predicts user's calories need per day with an approach using linear regression
 
 ## Technologies
 * Tensorflow 
