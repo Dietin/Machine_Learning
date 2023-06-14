@@ -4,10 +4,12 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [Dataset](#dataset)
 * [Model Architecture](#model-architecture)
+* [Model Results](#model-results)
 
 ## General info
-This repository will contain information about models for the Diet!in application which will provide predictions of user's calories need per day.
+This repository will contain information about the models that used by Diet!n applicatin to predicts user's calories need per day.
 
 ## Technologies
 * Tensorflow 
@@ -21,7 +23,15 @@ The setup to build and training the model :
 * Install latest version of libraries (Tensorflow, Pandas, Numpy, Seaborn, etc)
 * Prepare dataset with .csv format
 
+## Dataset
+The dataset that we used comes from [Kaggle's site](https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation) which is a collection of calorie data to maintain weight based on age, weight, height, gender, BMI, BMR and activity level
+
 ## Model Architecture
+**Data Pre-Processing**
+
+**Train Model**
+
+## Model Results
 **Prediksi kalori harian (Linear Regression)**
 
 1. Input data diri sesuai data yang di training (umur, jenis kelamin, berat, tinggi badan, aktivitas)
