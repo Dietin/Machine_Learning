@@ -5,7 +5,7 @@
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Dataset](#dataset)
-* [Model Results](#model-results)
+* [Model Result](#model-results)
 
 ## General info
 This repository will contain information about the models that used by Diet!n applicatin to predicts user's calories need per day with an approach using linear regression
@@ -25,14 +25,22 @@ The setup to build and training the model :
 ## Dataset
 The dataset that we used comes from [Kaggle's site](https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation) which is a collection of calorie data to maintain weight based on age, weight, height, gender, BMI, BMR and activity level
 
-Data processing is carried out as follows: 
+[Data processing](https://github.com/Dietin/Machine_Learning/blob/main/Data/after_preprocessing.csv) is carried out as follows: 
 1. Deleting the bmi_tags column and labels
 2. Changing the category column to numeric
 3. Changing the unit for the user's height column and rounding off the user's weight column
 
 ## Model Results
-**Model's Flow for Daily Calorie Needs (Linear Regression)**
+**Model's Summary**
 
+**Model's Metric**
+
+This is how our [final model](https://github.com/Dietin/Machine_Learning/blob/main/Model/notebook%5B2%5D.ipynb) training history
+![WhatsApp Image 2023-06-14 at 19 07 44](https://github.com/Dietin/Machine_Learning/assets/99454751/3e2476a4-e7d6-4f9b-929c-a2a03f8bb7d8)
+
+**Model's Testing**
+
+**Final Model's Flow for Daily Calorie Needs Prediction**
 1. User inputs personal data according to the data in the training (age, gender, weight, height, activity)
 2. User chooses priority or goals which is maintain, loose or gain their weight
 3. Model will gives prediction of calorie needs based on user priorities
