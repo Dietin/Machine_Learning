@@ -29,22 +29,28 @@ The dataset that we used comes from [Kaggle's site](https://www.kaggle.com/datas
 ## Model Architecture
 **Data Pre-Processing**
 
-**Train Model**
+Data processing is carried out as follows: 
+1. Deleting the bmi_tags column and labels
+2. Changing the category column to numeric
+3. Changing the unit for the user's height column and rounding off the user's weight column
+
+**Train History**
+
+
 
 ## Model Results
-**Prediksi kalori harian (Linear Regression)**
+**Model's Flow for Daily Calorie Needs (Linear Regression)**
 
-1. Input data diri sesuai data yang di training (umur, jenis kelamin, berat, tinggi badan, aktivitas)
-2. Pilih prioritas => gemukin, standar, kurusin
-3. Prediksi kebutuhan kalori berdasarkan prioritas user
-    - Misal, jika ingin gemukin, maka input gemukin nya berapa kg, kemudian lakukan prediksi kalori berdasarkan data yang diinputkan + data berat tambahannya
-4. Output : jumlah kalori dalam sehari dan kebutuhan kalori per 3 sesi (pagi, siang dan malam) berdasarkan prioritas user
-5. Cari rekomendasi resep sesuai selera user
+1. User inputs personal data according to the data in the training (age, gender, weight, height, activity)
+2. User chooses priority or goals which is maintain, loose or gain their weight
+3. Model will gives prediction of calorie needs based on user priorities
+     - For example, if you want to be fat, then input how many kg you are fat, then predict calories based on the data entered + additional weight data
+4. Output that will model gives is number of calories in a day based on user priority
 
-**Pipeline untuk prediksi kalori harian**
+**Pipeline for Daily Calorie Needs**
 
-1. Cari dataset yang berhubungan dengan kalori
-2. Preprocessing dataset
+1. Look for datasets related to calories
+2. Prep-rocessing dataset
 3. Create model
 4. Training model
 5. Evaluate model
