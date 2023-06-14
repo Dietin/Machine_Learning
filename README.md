@@ -5,7 +5,6 @@
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Dataset](#dataset)
-* [Model Architecture](#model-architecture)
 * [Model Results](#model-results)
 
 ## General info
@@ -26,17 +25,10 @@ The setup to build and training the model :
 ## Dataset
 The dataset that we used comes from [Kaggle's site](https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation) which is a collection of calorie data to maintain weight based on age, weight, height, gender, BMI, BMR and activity level
 
-## Model Architecture
-**Data Pre-Processing**
-
 Data processing is carried out as follows: 
 1. Deleting the bmi_tags column and labels
 2. Changing the category column to numeric
 3. Changing the unit for the user's height column and rounding off the user's weight column
-
-**Train History**
-
-
 
 ## Model Results
 **Model's Flow for Daily Calorie Needs (Linear Regression)**
