@@ -25,7 +25,8 @@ The setup to build and training the model :
 ## Dataset
 The dataset that we used comes from [Kaggle's site](https://www.kaggle.com/datasets/vechoo/diet-plan-recommendation) which is a collection of calorie data to maintain weight based on age, weight, height, gender, BMI, BMR and activity level
 
-[Data processing](https://github.com/Dietin/Machine_Learning/blob/main/Data/after_preprocessing.csv) is carried out as follows: 
+[Data processing](
+https://github.com/Dietin/Machine_Learning/blob/main/Data/after_preprocessing.csv) is carried out as follows: 
 1. Deleting the bmi_tags column and labels
 2. Changing the category column to numeric
 3. Changing the unit for the user's height column and rounding off the user's weight column
